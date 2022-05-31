@@ -4,7 +4,7 @@ let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
-const noteApi = '/api/note.html'
+const noteApi = '/api/notes.html'
 
 if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
