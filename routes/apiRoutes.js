@@ -1,24 +1,50 @@
 const router = require('express').Router();
-const path = require('path');
 const fs = require('fs');
-const db = 'db/db.json'
+const path = require('path');
+const notes = require('../db/db.json');
 
-
-router.get('/notes', (req, res)=> {
-    res.sendFile(path.join(__dirname, db))
+// get notes 
+router.get('/notes', (req, res) => {
+    res.send(notes);
 });
 
+// add and save note
 router.post('/notes', (req, res) => {
-    let notes = fs.readFileSync(db)
-    notes = JSON.parse(notes)
-    console.log(notes);
-    console.log(req);
-    req.body.id = notes.length.toString();
+    id = notes.length+1;
+    notes.push({
+        id: id,
+        title: req.body.title,
+        text: req.body.text,
+    });
+    fs.writeFile(
+        path.join(__dirname, '../db/db.json'),
+        JSON.stringify(notes),
+        err => {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json(notes);
+            }
+        }
+    )
+});
 
-    //if(req.body.title && req.body.text) {
-        
-    //}
-})
-
+// delete note
+router.delete('/notes/:id', (req, res) => {
+    notes.some((note_elements, index) => {
+        if (note_elements.id == req.params.id) {
+          notes.splice(index, 1);
+          fs.writeFile(path.join(__dirname, '../db/db.json'), JSON.stringify(notes), err => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.json(note_elements);
+            }
+          });
+          return true;
+        }
+      });
+    });
+    
 
 module.exports = router;
