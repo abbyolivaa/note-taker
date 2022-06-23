@@ -22,6 +22,7 @@ const hide = (elem) => {
   elem.style.display = 'none';
 };
 
+// activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
 const getNotes = () =>
@@ -83,7 +84,6 @@ const handleNoteDelete = (e) => {
 
   const note = e.target;
   const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
-  console.log(noteId);///
 
   if (activeNote.id === noteId) {
     activeNote = {};
@@ -99,8 +99,6 @@ const handleNoteDelete = (e) => {
 const handleNoteView = (e) => {
   e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
-  console.log(activeNote); ///
-
   renderActiveNote();
 };
 
